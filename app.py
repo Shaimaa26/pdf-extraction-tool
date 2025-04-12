@@ -5,8 +5,8 @@ import requests
 import streamlit as st
 
 # Streamlit setup
-st.set_page_config(page_title="PDF Keyword Finder", layout="centered")
-st.title("🔍 PDF Keyword Finder")
+st.set_page_config(page_title="PDF Extraction Tool", layout="centered")
+st.title("🔍 PDF Extraction Tool")
 
 # Upload Excel file
 excel_file = st.file_uploader("📂 Upload your Excel file", type=["xlsx"])

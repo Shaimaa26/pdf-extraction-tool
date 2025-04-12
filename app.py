@@ -3,10 +3,38 @@ import pandas as pd
 import PyPDF2
 import requests
 import streamlit as st
+from io import BytesIO
 
 # Streamlit setup
 st.set_page_config(page_title="PDF Extraction Tool", layout="centered")
 st.title("🔍 PDF Extraction Tool")
+
+# --- Sample Excel Template ---
+def generate_sample_excel():
+    # Sample data for PDFs and Keywords
+    pdfs_data = pd.DataFrame({
+        'Filename': ['https://www.example.com/sample1.pdf', 'https://www.example.com/sample2.pdf']
+    })
+    keywords_data = pd.DataFrame({
+        'Keyword': ['voltage', 'current', 'temperature']
+    })
+
+    # Create an in-memory Excel file
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+        pdfs_data.to_excel(writer, sheet_name='PDFs', index=False)
+        keywords_data.to_excel(writer, sheet_name='Keywords', index=False)
+    output.seek(0)
+    return output
+
+# Download button for template
+st.markdown("### 📄 Download Template Excel File")
+st.download_button(
+    label="📥 Download Sample Template",
+    data=generate_sample_excel(),
+    file_name="sample_template.xlsx",
+    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+)
 
 # Upload Excel file
 excel_file = st.file_uploader("📂 Upload your Excel file", type=["xlsx"])
@@ -58,7 +86,7 @@ if excel_file is not None:
                                 # Remove keyword from the line (case-insensitive)
                                 start = line_lower.find(keyword)
                                 cleaned_line = (
-                                    line[:start] + 
+                                    line[:start] +
                                     line[start + len(keyword):]
                                 ).strip()
 

@@ -21,7 +21,7 @@ def generate_sample_excel():
 
     # Create an in-memory Excel file
     output = BytesIO()
-    with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:  # 👈 Fix: using openpyxl instead of xlsxwriter
         pdfs_data.to_excel(writer, sheet_name='PDFs', index=False)
         keywords_data.to_excel(writer, sheet_name='Keywords', index=False)
     output.seek(0)
@@ -106,7 +106,7 @@ if excel_file is not None:
             st.dataframe(output_df)
 
             output_file = "output_results.xlsx"
-            output_df.to_excel(output_file, index=False)
+            output_df.to_excel(output_file, index=False, engine='openpyxl')  # ✅ Use openpyxl here too
 
             with open(output_file, "rb") as f:
                 st.download_button("⬇️ Download Results", data=f, file_name="output_results.xlsx")
